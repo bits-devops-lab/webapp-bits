@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #2d3436;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #status {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: #2d3436;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: #f5f7fa;
+            border: none;
+            border-radius: 10px;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            color: #2d3436;
+        }
+
+        .cell:hover {
+            background: #e2e8f0;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a166ab 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-button:hover {
+            opacity: 0.9;
+        }
+
+        .restart-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+
+        .restart-button:hover {
+            opacity: 0.9;
+        }
+        .credits {
+            text-align: center;
+            margin-top: 2rem;
+            color: #2d3436;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic-Tac-Toe</h1>
+        <div id="status">Player X's turn</div>
+        <div class="board" id="board">
+            <button class="cell" onclick="makeMove(0)"></button>
+            <button class="cell" onclick="makeMove(1)"></button>
+            <button class="cell" onclick="makeMove(2)"></button>
+            <button class="cell" onclick="makeMove(3)"></button>
+            <button class="cell" onclick="makeMove(4)"></button>
+            <button class="cell" onclick="makeMove(5)"></button>
+            <button class="cell" onclick="makeMove(6)"></button>
+            <button class="cell" onclick="makeMove(7)"></button>
+            <button class="cell" onclick="makeMove(8)"></button>
+        </div>
+        <div class="controls">
+            <button class="restart-button" onclick="restartGame()">Restart Game</button>
+            <a href="index.html" class="back-button">Back to Games</a>
+        </div>
+    </div>
+
+    <script>
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+
+        function makeMove(index) {
+            if (gameBoard[index] === '' && gameActive) {
+                gameBoard[index] = currentPlayer;
+                document.getElementsByClassName('cell')[index].textContent = currentPlayer;
+                
+                if (checkWin()) {
+                    document.getElementById('status').textContent = `Player ${currentPlayer} wins!`;
+                    gameActive = false;
+                } else if (gameBoard.every(cell => cell !== '')) {
+                    document.getElementById('status').textContent = "It's a draw!";
+                    gameActive = false;
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                    document.getElementById('status').textContent = `Player ${currentPlayer}'s turn`;
+                }
+            }
+        }
+
+        function checkWin() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6] // Diagonals
+            ];
+
+            return winPatterns.some(pattern => {
+                const [a, b, c] = pattern;
+                return gameBoard[a] !== '' &&
+                       gameBoard[a] === gameBoard[b] &&
+                       gameBoard[b] === gameBoard[c];
+            });
+        }
+
+        function restartGame() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            currentPlayer = 'X';
+            document.getElementById('status').textContent = "Player X's turn";
+            Array.from(document.getElementsByClassName('cell')).forEach(cell => {
+                cell.textContent = '';
+            });
+        }
+    </script>
+</body>
+<div class="credits">
+            Developed by MDRHL1.0
+        </div>
+</html>
