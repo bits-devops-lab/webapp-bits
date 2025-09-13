@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2d3436;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .scoreboard {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .score {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: #636e72;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .player-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .player-title {
+            font-size: 1.5rem;
+            color: #2d3436;
+            margin-bottom: 1rem;
+        }
+
+        .choice {
+            font-size: 4rem;
+            margin: 1rem 0;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .choice.selected {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        .choice.winner {
+            color: #00b894;
+            animation: winner 0.5s ease infinite;
+        }
+
+        @keyframes winner {
+            0% { transform: scale(1.2); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1.2); }
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .choice-btn {
+            background: white;
+            border: none;
+            padding: 1rem;
+            font-size: 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-5px);
+        }
+
+        .choice-btn:active {
+            transform: translateY(0);
+        }
+
+        #status {
+            font-size: 1.5rem;
+            color: #2d3436;
+            margin: 1rem 0;
+            min-height: 2rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a166ab 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-button:hover {
+            opacity: 0.9;
+        }
+
+        .restart-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .credits {
+            text-align: center;
+            margin-top: 2rem;
+            color: #2d3436;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .restart-button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rock Paper Scissors</h1>
+        
+        <div class="scoreboard">
+            <div class="score">
+                <div class="score-label">Player 1</div>
+                <div class="score-value" id="player1-score">0</div>
+            </div>
+            <div class="score">
+                <div class="score-label">Player 2</div>
+                <div class="score-value" id="player2-score">0</div>
+            </div>
+        </div>
+
+        <div id="status">Player 1's Turn</div>
+
+        <div class="game-area">
+            <div class="player-section">
+                <div class="player-title">Player 1</div>
+                <div class="choice" id="player1-choice">❔</div>
+            </div>
+            <div class="player-section">
+                <div class="player-title">Player 2</div>
+                <div class="choice" id="player2-choice">❔</div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="choice-btn" onclick="makeChoice('🗿')">🗿</button>
+            <button class="choice-btn" onclick="makeChoice('📄')">📄</button>
+            <button class="choice-btn" onclick="makeChoice('✂️')">✂️</button>
+        </div>
+
+        <div class="controls">
+            <button class="restart-button" onclick="restartGame()">New Game</button>
+            <a href="index.html" class="back-button">Back to Games</a>
+        </div>
+    </div>
+
+    <script>
+        let player1Score = 0;
+        let player2Score = 0;
+        let currentPlayer = 1;
+        let player1Choice = '';
+        let player2Choice = '';
+        let gameActive = true;
+
+        function makeChoice(choice) {
+            if (!gameActive) return;
+
+            if (currentPlayer === 1) {
+                player1Choice = choice;
+                document.getElementById('player1-choice').textContent = '❔';
+                document.getElementById('status').textContent = "Player 2's Turn";
+                currentPlayer = 2;
+            } else {
+                player2Choice = choice;
+                determineWinner();
+            }
+        }
+
+        function determineWinner() {
+            document.getElementById('player1-choice').textContent = player1Choice;
+            document.getElementById('player2-choice').textContent = player2Choice;
+
+            let result;
+            if (player1Choice === player2Choice) {
+                result = "It's a tie!";
+            } else if (
+                (player1Choice === '🗿' && player2Choice === '✂️') ||
+                (player1Choice === '📄' && player2Choice === '🗿') ||
+                (player1Choice === '✂️' && player2Choice === '📄')
+            ) {
+                result = "Player 1 wins!";
+                player1Score++;
+                document.getElementById('player1-choice').classList.add('winner');
+            } else {
+                result = "Player 2 wins!";
+                player2Score++;
+                document.getElementById('player2-choice').classList.add('winner');
+            }
+
+            document.getElementById('player1-score').textContent = player1Score;
+            document.getElementById('player2-score').textContent = player2Score;
+            document.getElementById('status').textContent = result;
+
+            if (player1Score === 5 || player2Score === 5) {
+                gameActive = false;
+                document.getElementById('status').textContent = 
+                    `Game Over! ${player1Score === 5 ? 'Player 1' : 'Player 2'} wins the match!`;
+            } else {
+                setTimeout(resetRound, 1500);
+            }
+        }
+
+        function resetRound() {
+            player1Choice = '';
+            player2Choice = '';
+            currentPlayer = 1;
+            document.getElementById('player1-choice').textContent = '❔';
+            document.getElementById('player2-choice').textContent = '❔';
+            document.getElementById('status').textContent = "Player 1's Turn";
+            document.getElementById('player1-choice').classList.remove('winner');
+            document.getElementById('player2-choice').classList.remove('winner');
+        }
+
+        function restartGame() {
+            player1Score = 0;
+            player2Score = 0;
+            gameActive = true;
+            document.getElementById('player1-score').textContent = '0';
+            document.getElementById('player2-score').textContent = '0';
+            resetRound();
+        }
+    </script>
+</body>
+<div class="credits">
+            Developed by MDRHL1.0
+        </div>
+</html>
