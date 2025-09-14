@@ -24,10 +24,10 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        /* stage('Deploy to Kubernetes') {
             steps {
                 sh 'kubectl set image deployment/myapp myapp=mdrhlonedoto/webapp-using-pipeline:latest --record'
             }
-        }
+        } */
     }
 }
