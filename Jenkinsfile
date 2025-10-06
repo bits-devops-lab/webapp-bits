@@ -27,7 +27,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
            steps {
              withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
-            sh '''
+                     sh '''
               set -e
               cat <<EOF > kubeconfig-temp-file.yaml
               $KUBECONFIG_CONTENT
@@ -38,7 +38,7 @@ pipeline {
               kubectl apply -f webapp-bits-deployment.yaml
               kubectl rollout status deployment/webapp-bits
               kubectl get svc webapp-bits-service
-            '''
+              '''
             }
           }
         }
