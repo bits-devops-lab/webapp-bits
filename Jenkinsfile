@@ -24,20 +24,13 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-           steps {
-             withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
-                     sh '''
-              set -e
-              echo "$KUBECONFIG_CONTENT" > kubeconfig-temp-file.yaml
-              export KUBECONFIG=$(pwd)/kubeconfig-temp-file.yaml
-              
-              kubectl apply -f webapp-bits-deployment.yaml
-              kubectl rollout status deployment/webapp-bits
-              kubectl get svc webapp-bits-service
-              '''
+       stage('Deploy to Kubernetes') {
+         steps {
+           withCredentials([file(credentialsId: 'minikube-cred', variable: 'KUBECONFIG')]) {
+            sh 'kubectl apply -f k8s/webapp-bits-deployment.yaml'
+               }
             }
-          }
         }
+
     }
 }
