@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-bits
+  labels:
+    app: webapp-bits
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-bits
+  template:
+    metadata:
+      labels:
+        app: webapp-bits
+    spec:
+      containers:
+        - name: webapp-bits
+          image: YOUR_DOCKERHUB_USERNAME/webapp-bits:latest
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
