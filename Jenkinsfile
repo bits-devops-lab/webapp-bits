@@ -26,7 +26,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-              withCredentials([file(credentialsId: 'kubeconfig-minikube', variable: 'KUBECONFIG')]) {
+              withCredentials([file(credentialsId: 'minikube-kubeconfig', variable: 'KUBECONFIG')]) {
                sh 'kubectl apply -f webapp-bits-deployment.yaml'
                sh 'kubectl rollout status deployment/webapp-bits'
                sh 'kubectl get svc webapp-bits-service'
