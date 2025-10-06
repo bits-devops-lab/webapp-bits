@@ -25,13 +25,18 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-            steps {
-              withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-               sh 'kubectl apply -f webapp-bits-deployment.yaml'
-               sh 'kubectl rollout status deployment/webapp-bits'
-               sh 'kubectl get svc webapp-bits-service'
+          steps {
+            withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
+             sh '''
+             echo "$KUBECONFIG_CONTENT" > kubeconfig-temp-file.yaml
+             export KUBECONFIG=$(pwd)/kubeconfig-temp-file.yaml
+            
+             kubectl apply -f webapp-bits-deployment.yaml
+             kubectl rollout status deployment/webapp-bits
+             kubectl get svc webapp-bits-service
+             '''
             }
-         }
-       }
+          }
+        }
     }
 }
