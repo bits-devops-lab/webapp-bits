@@ -24,10 +24,14 @@ pipeline {
             }
         }
 
-        /* stage('Deploy to Kubernetes') {
+        stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl set image deployment/myapp myapp=mdrhlonedoto/webapp-using-pipeline:latest --record'
+              withCredentials([file(credentialsId: 'kubeconfig-minikube', variable: 'KUBECONFIG')]) {
+               sh 'kubectl apply -f webapp-bits-deployment.yaml'
+               sh 'kubectl rollout status deployment/webapp-bits'
+               sh 'kubectl get svc webapp-bits-service'
             }
-        } */
+         }
+       }
     }
 }
