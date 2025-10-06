@@ -27,7 +27,7 @@ pipeline {
        stage('Deploy to Kubernetes') {
          steps {
            withCredentials([file(credentialsId: 'minikube-cred', variable: 'KUBECONFIG')]) {
-            sh 'kubectl apply -f k8s/webapp-bits-deployment.yaml'
+            sh 'kubectl apply -f webapp-bits-deployment.yaml'
                }
             }
         }
