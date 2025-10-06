@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: webapp-bits
-          image: YOUR_DOCKERHUB_USERNAME/webapp-bits:latest
+          image: mdrhlonedoto/webapp-bits:latest
           ports:
             - containerPort: 80
           imagePullPolicy: Always
