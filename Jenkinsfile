@@ -29,10 +29,7 @@ pipeline {
              withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
                      sh '''
               set -e
-              cat <<EOF > kubeconfig-temp-file.yaml
-              $KUBECONFIG_CONTENT
-              EOF
-              
+              echo "$KUBECONFIG_CONTENT" > kubeconfig-temp-file.yaml
               export KUBECONFIG=$(pwd)/kubeconfig-temp-file.yaml
               
               kubectl apply -f webapp-bits-deployment.yaml
