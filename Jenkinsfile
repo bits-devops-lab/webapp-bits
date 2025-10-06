@@ -25,21 +25,19 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-          steps {
-            withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
-             sh '''
-            # Use a here-document (cat <<EOF) to safely write the multiline content.
-            # This is cleaner than 'echo' for YAML.
-            cat <<EOF > kubeconfig-temp-file.yaml
-            $KUBECONFIG_CONTENT
-            EOF
-            
-            # Export the KUBECONFIG variable to the path of the new file
-            export KUBECONFIG=$(pwd)/kubeconfig-temp-file.yaml
-            
-            kubectl apply -f webapp-bits-deployment.yaml
-            kubectl rollout status deployment/webapp-bits
-            kubectl get svc webapp-bits-service
+           steps {
+             withCredentials([string(credentialsId: 'kubeconfig', variable: 'KUBECONFIG_CONTENT')]) {
+            sh '''
+              set -e
+              cat <<EOF > kubeconfig-temp-file.yaml
+              $KUBECONFIG_CONTENT
+              EOF
+              
+              export KUBECONFIG=$(pwd)/kubeconfig-temp-file.yaml
+              
+              kubectl apply -f webapp-bits-deployment.yaml
+              kubectl rollout status deployment/webapp-bits
+              kubectl get svc webapp-bits-service
             '''
             }
           }
