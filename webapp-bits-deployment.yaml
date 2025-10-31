@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: webapp-bits
-          image: mdrhlonedoto/webapp-using-pipeline:latest
+          image: mdrhlonedoto/webapp-bits:latest
           ports:
             - containerPort: 80
           imagePullPolicy: Always
